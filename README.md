@@ -2,19 +2,17 @@
 
 This command line tool is for downloading videos from http://dramacool.to/.
 
-In particular, I was watch [Descendant of the sun](http://dramacool.to/the-descendant-of-the-sun-episode-1.html), the hottest Korean drama right now (as of 2016).
+In particular, I was watching [Descendant of the sun](http://dramacool.to/the-descendant-of-the-sun-episode-1.html), the hottest Korean drama right now (as of 2016).
 
 ## Installation
 
-[youtube-dl](https://github.com/rg3/youtube-dl) is required, as it is used for the downloading:
+[youtube-dl](https://github.com/rg3/youtube-dl) is required, as it is used for downloading the video.
 
     brew install youtube-dl
 
-Then install this
+Then install `video-dl`:
 
-    git clone <this-url>
-    gem build video-dl.gemspec
-    gem install video-dl-1.0.0.gem
+    gem install video-dl
 
 
 ## Usage
