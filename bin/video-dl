@@ -1,0 +1,57 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+require "bundler/setup"
+require 'commander/import'
+require 'json'
+require 'open-uri'
+require 'nokogiri'
+
+program :name, "video-dl"
+program :version, '1.0.0'
+program :description, 'Download video easily'
+
+default_command :download
+
+command :download do |c|
+    c.syntax = 'video-dl download http://some.url'
+    c.description = 'Download a video'
+    c.option '--bar STRING', String, 'Option bar with a string'
+    c.action do |args, options|
+    	options.default :bar => 'BAR'
+    	# puts "Args: #{args}"
+    	# puts "Option Bar: #{options.bar}"
+    	url = args[0]
+    	download_video(url)
+    end
+end
+
+
+
+
+########################################################################################
+# Video Download
+########################################################################################
+
+def download_video(url)
+  puts "Downloading #{url}"
+
+  doc = Nokogiri::HTML(open(url))
+  # puts doc
+
+  title = doc.css("h1[class='title']")[0].content
+  puts "Title: #{title}"
+
+  iframeSrc = doc.css('div#servermobile > iframe')[0]['src']
+  # puts iframeSrc
+
+  doc = Nokogiri::HTML(open(iframeSrc))
+  # puts doc
+
+  videoUrl = doc.css("video#my-video > source[label='720']")[0]['src']
+  puts "Video is at #{videoUrl} \n\n"
+
+  cmd = "youtube-dl -o #{Shellwords.escape(title)}.mp4 #{Shellwords.escape(videoUrl)}"
+  puts "Running #{cmd}"
+  puts system(cmd)
+end
