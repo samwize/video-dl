@@ -13,9 +13,6 @@ GEM
     mini_portile2 (2.0.0)
     nokogiri (1.6.7.2)
       mini_portile2 (~> 2.0.0.rc2)
-    paint (1.0.1)
-    restclient (0.11.3)
-      paint (~> 1.0)
 
 PLATFORMS
   ruby
@@ -23,7 +20,6 @@ PLATFORMS
 DEPENDENCIES
   commander
   nokogiri
-  restclient
   video-dl!
 
 BUNDLED WITH

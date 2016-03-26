@@ -1,2 +1,5 @@
 *.gem
 .DS_Store
+*.html
+*.mp4.part
+*.mp4

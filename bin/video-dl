@@ -5,6 +5,7 @@ require "bundler/setup"
 require 'commander/import'
 require 'open-uri'
 require 'nokogiri'
+require 'uri'
 
 program :name, "video-dl"
 program :version, '1.0.0'
@@ -25,12 +26,35 @@ command :download do |c|
   end
 end
 
+command :episodes do |c|
+  c.syntax = 'video-dl episodes http://some.url'
+  c.description = 'Download all the episodes of a drama'
+  c.action do |args, options|
+  	url = args[0]
+  	download_all_episodes(url)
+  end
+end
+
+command :html do |c|
+  c.syntax = 'video-dl html http://some.url'
+  c.description = 'Display the html of the url'
+  c.action do |args, options|
+    url = args[0]
+  	display_html(url)
+  end
+end
+
 
 
 
 ########################################################################################
 # Video Download
 ########################################################################################
+
+def display_html(url)
+  doc = Nokogiri::HTML(open(url))
+  puts doc
+end
 
 def download_video(url)
   puts "Downloading from #{url}"
@@ -43,20 +67,91 @@ def download_video(url)
   title = doc.css("h1[class='title']")[0].content
   puts "Title: #{title}"
 
-  # Video is in an iframe
+  # doc.css("source[type='video/mp4']").each { |source|
+  #   puts "Source: #{source['src']}"
+  # }
+
+  sources = doc.css("source[type='video/mp4']")
+  videoUrl = findHighestRes(sources)
+  if videoUrl != nil
+    download(title, videoUrl)
+    return
+  end
+
+  # Otherwise, video is in an iframe
   iframeSrc = doc.css('div#servermobile > iframe')[0]['src']
-  # puts iframeSrc
+  puts "iframe src: #{iframeSrc}"
 
   # Read the iframe HTML
   doc = Nokogiri::HTML(open(iframeSrc))
   # puts doc
 
   # Finally we have the video url
-  videoUrl = doc.css("video#my-video > source[label='720']")[0]['src']
-  puts "Video is at #{videoUrl}\n\n"
+  sources = doc.css("source[type='video/mp4']")
+  videoUrl = findHighestRes(sources)
+  if videoUrl != nil
+    download(title, videoUrl)
+    return
+  else
+    puts "Failed to find video url"
+  end
+end
 
-  # Run youtube-dl shell command
+
+# Run youtube-dl shell command
+def download(title, videoUrl)
+  puts "Video is at #{videoUrl}\n\n"
   cmd = "youtube-dl -o #{Shellwords.escape(title)}.mp4 #{Shellwords.escape(videoUrl)}"
   puts "Running #{cmd}"
-  puts system(cmd)
+  system(cmd)
+end
+
+
+# Find the highest resolution source from an array of sources like this:
+# <source src="http://3.bp.blogspot.com/xyz" type="video/mp4" label="720"></source>
+# Return the video url
+def findHighestRes(sources)
+  if sources.length > 0
+    highestResSource = nil
+    sources.each { |source|
+      if highestResSource == nil
+        highestResSource = source
+      else
+        if source['label'].to_i > highestResSource['label'].to_i
+          highestResSource = source
+        end
+      end
+    }
+    # puts "Highest Res Source: #{highestResSource}"
+    videoUrl = highestResSource['src']
+    return videoUrl
+  end
+  return nil
+end
+
+
+def download_all_episodes(url)
+  puts "Downloading all episodes from #{url}"
+
+  uri = URI.parse(url)
+  domain = "#{uri.scheme}://#{uri.host}"
+  # puts "Domain: #{domain}"
+
+  # Read the url HTML
+  doc = Nokogiri::HTML(open(url))
+
+  # Find the episode list
+  episodes = doc.css("select[class='gotolistepisode'] > option")
+  episodeUrls = []
+  puts "Episodes:"
+  episodes.reverse.each { |episode|
+    episodeUrl = "#{domain}#{episode['value']}"
+    puts "\tEpisode URL: #{episodeUrl}"
+    episodeUrls.push(episodeUrl)
+  }
+
+  # Download each
+  episodeUrls.each { |episodeUrl|
+    download_video(episodeUrl)
+  }
 end

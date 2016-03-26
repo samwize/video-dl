@@ -17,6 +17,8 @@ Then install `video-dl`:
 
 ## Usage
 
+    # Download the highest resolution video in the current directory.
     video-dl http://dramacool.to/the-descendant-of-the-sun-episode-6.html
 
-The command will simply download in the current directory.
+    # Download all the episodes
+    video-dl episodes http://dramacool.to/the-descendant-of-the-sun-episode-1.html
