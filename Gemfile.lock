@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    video-dl (1.1.0)
+    video-dl (1.1.1)
       commander
 
 GEM
