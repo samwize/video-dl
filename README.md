@@ -17,6 +17,8 @@ Then install `video-dl`:
 
 ## Usage
 
+_IMPORTANT_: Because dramacool added [CloudFlare DDoS protection](http://superuser.com/questions/888507/problems-with-wget-to-a-cloudflare-hosted-site-503-service-unavailable/888523) in July 2016, it is now impossible to use this script as it is. There will be a 503 Service Unavailable error. To solve, you have to edit the script. Change the cookies and useragent to yours (instructions within the script).
+
     # Download the highest resolution video in the current directory.
     video-dl http://dramacool.to/the-descendant-of-the-sun-episode-6.html
 

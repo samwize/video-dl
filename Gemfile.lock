@@ -1,26 +1,28 @@
 PATH
   remote: .
   specs:
-    video-dl (1.0.0)
+    video-dl (1.1.0)
       commander
 
 GEM
   remote: http://rubygems.org/
   specs:
-    commander (4.3.7)
+    commander (4.4.0)
       highline (~> 1.7.2)
     highline (1.7.8)
-    mini_portile2 (2.0.0)
-    nokogiri (1.6.7.2)
-      mini_portile2 (~> 2.0.0.rc2)
+    mini_portile2 (2.1.0)
+    nokogiri (1.6.8)
+      mini_portile2 (~> 2.1.0)
+      pkg-config (~> 1.1.7)
+    pkg-config (1.1.7)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  commander
+  commander (~> 4.4)
   nokogiri
   video-dl!
 
 BUNDLED WITH
-   1.11.2
+   1.12.5

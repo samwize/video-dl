@@ -8,7 +8,7 @@ require 'nokogiri'
 require 'uri'
 
 program :name, "video-dl"
-program :version, '1.0.0'
+program :version, '1.1.1'
 program :description, 'Download video easily'
 
 default_command :download
@@ -51,8 +51,23 @@ end
 # Video Download
 ########################################################################################
 
+def open_html(url)
+  # Hard code these:
+  # Open the website in Safari, check copy the cookie
+  # Also navigator.userAgent
+  user_agent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/601.7.7 (KHTML, like Gecko) Version/9.1.2 Safari/601.7.7"
+  cfduid = "dc161acc7c803d061e37601f99d3a613f1467552669"
+  cfclearance = "fc5cc7b4944ed7e935b80ea3d38c1cdbdd3579ce-1470723829-1800"
+
+  cookie_string = "__cfduid=#{cfduid};cf_clearance=#{cfclearance}"
+  open_doc = open(url, 'User-Agent' => user_agent, "Cookie" => cookie_string)
+  doc = Nokogiri::HTML(open_doc)
+  return doc
+end
+
 def display_html(url)
-  doc = Nokogiri::HTML(open(url))
+  puts "Download URL #{url}"
+  doc = open_html(url)
   puts doc
 end
 
@@ -60,7 +75,7 @@ def download_video(url)
   puts "Downloading from #{url}"
 
   # Read the url HTML
-  doc = Nokogiri::HTML(open(url))
+  doc = open_html(url)
   # puts doc
 
   # Find the video title
