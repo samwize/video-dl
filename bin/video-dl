@@ -44,6 +44,14 @@ command :html do |c|
   end
 end
 
+command :toggle do |c|
+  c.syntax = 'video-dl toggle http://video.toggle.sg/en/video/series/dream-coder/ep3/476595'
+  c.description = 'Download a toggle.sg video'
+  c.action do |args|
+  	url = args[0]
+  	download_toggle(url)
+  end
+end
 
 
 
@@ -166,4 +174,29 @@ def download_all_episodes(url)
   episodeUrls.each { |episodeUrl|
     download_video(episodeUrl)
   }
+end
+
+
+
+########################################################################################
+# toggle.sg
+########################################################################################
+
+def download_toggle(url)
+  puts "Downloading from #{url}"
+
+  doc = open_html(url)
+
+  # Find the video title
+  title = doc.css("h2[class='video__title']")[0].content.strip!
+  puts "Title: #{title}"
+
+  # doc.css("source[type='video/mp4']").each { |source|
+  #   puts "Source: #{source['src']}"
+  # }
+
+  # FAIL - video html loaded by JS
+  src = doc.css("div[class='videoDisplay']")
+  puts ">>"
+  puts "<<"
 end

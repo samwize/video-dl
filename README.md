@@ -28,7 +28,7 @@ To solve, you have to provide some information manually in current version.
 
 In you bash, you need to set the 3 values you copied to your environment variables, like this:
 
-    export VD_USERAGENT=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/601.7.7 (KHTML, like Gecko) Version/9.1.2 Safari/601.7.7
+    export VD_USERAGENT="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/601.7.7 (KHTML, like Gecko) Version/9.1.2 Safari/601.7.7"
     export CFDUID=dc161acc7c803d061e37601f99d3a613f1467552669
     export CFCLEARANCE=24a24f89450cc2fbc4f58c430e0c52551093af9a-1470733072-1800
 
