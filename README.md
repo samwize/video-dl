@@ -14,6 +14,10 @@ Then install `video-dl`:
 
     gem install video-dl
 
+If cloned this project, then:
+
+    gem build video-dl.gemspec
+    gem install video-dl-1.x.x.gem
 
 ## Usage
 
@@ -28,9 +32,9 @@ To solve, you have to provide some information manually in current version.
 
 In you bash, you need to set the 3 values you copied to your environment variables, like this:
 
-    export VD_USERAGENT="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/601.7.7 (KHTML, like Gecko) Version/9.1.2 Safari/601.7.7"
-    export CFDUID=dc161acc7c803d061e37601f99d3a613f1467552669
-    export CFCLEARANCE=24a24f89450cc2fbc4f58c430e0c52551093af9a-1470733072-1800
+    export VD_USERAGENT="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/603.3.8 (KHTML, like Gecko) Version/10.1.2 Safari/603.3.8"
+    export CFDUID=d306446c6518e36a1b96dae1fcf7f74681503574569
+    export CFCLEARANCE=d05eaa36a565f18d305eb78d4ea28a85c1af24fd-1503574573-604800
 
 Note: `CFCLEARANCE` will expired in 90 minutes, so if you need to use beyond that, you need to update this value.
 
@@ -39,3 +43,12 @@ Note: `CFCLEARANCE` will expired in 90 minutes, so if you need to use beyond tha
 
     # Download all the episodes
     video-dl episodes http://dramacool.to/the-descendant-of-the-sun-episode-1.html
+
+## For Game of Thrones
+
+[VideoPad](http://videopad.me/series/2-game-of-thrones/seasons/2/episodes/6) has streams via WeShare.
+
+They are also protected by CloudFlare so you will have to provide some environment variables similarly (read above).
+
+    # Download season 2 episode 6
+    video-dl videopadweshare http://videopad.me/series/2-game-of-thrones/seasons/2/episodes/6

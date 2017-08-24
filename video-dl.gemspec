@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = 'video-dl'
-  s.version = '1.1.2'
+  s.version = '1.1.3'
   s.date = '2016-03-25'
   s.summary = "Download video"
   s.description = "Download video from various sources"

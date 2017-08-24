@@ -8,7 +8,7 @@ require 'nokogiri'
 require 'uri'
 
 program :name, "video-dl"
-program :version, '1.1.1'
+program :version, '1.1.3'
 program :description, 'Download video easily'
 
 default_command :download
@@ -50,6 +50,15 @@ command :toggle do |c|
   c.action do |args|
   	url = args[0]
   	download_toggle(url)
+  end
+end
+
+command :videopadweshare do |c|
+  c.syntax = 'video-dl videopadweshare http://videopad.me/series/2-game-of-thrones/seasons/2/episodes/6'
+  c.description = 'Download a videopad video via weshare'
+  c.action do |args|
+  	url = args[0]
+  	download_videopadweshare(url)
   end
 end
 
@@ -176,8 +185,6 @@ def download_all_episodes(url)
   }
 end
 
-
-
 ########################################################################################
 # toggle.sg
 ########################################################################################
@@ -199,4 +206,29 @@ def download_toggle(url)
   src = doc.css("div[class='videoDisplay']")
   puts ">>"
   puts "<<"
+end
+
+########################################################################################
+# Videopad via weshare
+########################################################################################
+
+def download_videopadweshare(url)
+  puts "Downloading from #{url}"
+
+  doc = open_html(url)
+
+  title = doc.css("p[class='episode-byline']")[0].content.strip!
+  title = title.gsub(/\s+/, ' ')
+  puts "Title: #{title}"
+
+  weshareDataBind = doc.css("td[class='name hover']")[0]["data-bind"]
+  regexUrl = /'(http.*)',/
+  weshareUrl = weshareDataBind.match(regexUrl).captures[0]
+  # puts "weshareUrl: #{weshareUrl}"
+
+  doc = open_html(weshareUrl)
+  videoUrl = doc.css("video[id=my-video] source")[0]["src"]
+  # puts "videoUrl: #{videoUrl}"
+
+  download(title, videoUrl)
 end
