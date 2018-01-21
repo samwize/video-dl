@@ -22,7 +22,7 @@ command :download do |c|
   	# puts "Args: #{args}"
   	# puts "Option Bar: #{options.bar}"
   	url = args[0]
-  	download_video(url)
+  	download_videopadweshare(url)
   end
 end
 
@@ -181,7 +181,7 @@ def download_all_episodes(url)
 
   # Download each
   episodeUrls.each { |episodeUrl|
-    download_video(episodeUrl)
+    download_videopadweshare(episodeUrl)
   }
 end
 
@@ -217,18 +217,24 @@ def download_videopadweshare(url)
 
   doc = open_html(url)
 
-  title = doc.css("p[class='episode-byline']")[0].content.strip!
+  title = doc.css("meta[name='twitter:title']")[0]["content"]
   title = title.gsub(/\s+/, ' ')
   puts "Title: #{title}"
 
-  weshareDataBind = doc.css("td[class='name hover']")[0]["data-bind"]
+  dataBind = doc.css("td[class='name hover']")[0]["data-bind"]
   regexUrl = /'(http.*)',/
-  weshareUrl = weshareDataBind.match(regexUrl).captures[0]
-  # puts "weshareUrl: #{weshareUrl}"
+  dataBindUrl = dataBind.match(regexUrl).captures[0]
+  puts "URL: #{dataBindUrl}"
 
-  doc = open_html(weshareUrl)
-  videoUrl = doc.css("video[id=my-video] source")[0]["src"]
-  # puts "videoUrl: #{videoUrl}"
+  if dataBindUrl.include? "weshare"
+    # weshare html contains the video
+    doc = open_html(dataBindUrl)
+    videoUrl = doc.css("video[id=my-video] source")[0]["src"]
+  else
+    # openload etc - does NOT work.. but let's try
+    videoUrl = dataBindUrl
+  end
 
+  puts "videoUrl: #{videoUrl}"
   download(title, videoUrl)
 end
