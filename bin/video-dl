@@ -217,8 +217,13 @@ def download_videopadweshare(url)
 
   doc = open_html(url)
 
-  title = doc.css("meta[name='twitter:title']")[0]["content"]
+  # title could be "The Big Bang Theory/ Season 11, Episode 8"
+  # subtitle could be "The Tesla Recoil"
+  title = doc.css("p[class='episode-byline']")[0].content.strip!
   title = title.gsub(/\s+/, ' ')
+  subtitle = doc.css("meta[name='twitter:title']")[0]["content"]
+  subtitle = title.gsub(/\s+/, ' ')
+  title = "#{title} - #{subtitle}"
   puts "Title: #{title}"
 
   dataBind = doc.css("td[class='name hover']")[0]["data-bind"]
